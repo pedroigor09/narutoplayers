@@ -1,41 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import fs from "fs/promises";
-import path from "path";
+import { prisma } from "@/lib/prisma";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-interface Subscription {
-  email: string;
-  days: string[];
-  subscribedAt: string;
-}
-
-const SUBSCRIPTIONS_FILE = path.join(process.cwd(), "data", "subscriptions.json");
-
-async function ensureDataDir() {
-  const dataDir = path.join(process.cwd(), "data");
-  try {
-    await fs.access(dataDir);
-  } catch {
-    await fs.mkdir(dataDir, { recursive: true });
-  }
-}
-
-async function loadSubscriptions(): Promise<Subscription[]> {
-  try {
-    await ensureDataDir();
-    const data = await fs.readFile(SUBSCRIPTIONS_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function saveSubscriptions(subscriptions: Subscription[]) {
-  await ensureDataDir();
-  await fs.writeFile(SUBSCRIPTIONS_FILE, JSON.stringify(subscriptions, null, 2));
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,25 +23,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const subscriptions = await loadSubscriptions();
-
-    const existingIndex = subscriptions.findIndex((sub) => sub.email === email);
-    
-    const newSubscription: Subscription = {
-      email,
-      days,
-      subscribedAt: new Date().toISOString(),
-    };
-
-    if (existingIndex >= 0) {
-      subscriptions[existingIndex] = newSubscription;
-    } else {
-      subscriptions.push(newSubscription);
-    }
-
-    await saveSubscriptions(subscriptions);
-
     try {
+      const subscription = await prisma.subscription.upsert({
+        where: { email },
+        update: { days },
+        create: { email, days },
+      });
+
+      try {
       await resend.emails.send({
         from: "Naruto Dark <onboarding@resend.dev>", // Change this after verifying your domain
         to: email,
