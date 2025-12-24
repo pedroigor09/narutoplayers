@@ -244,7 +244,7 @@ function EventIcon({ title, image, color, description, delay }: EventIconProps) 
 }
 
 export function CinematicEventsSection() {
-  const sectionRef = useRef<HTMLSection>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
