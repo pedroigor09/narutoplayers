@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      const emailPromises = subscriptions.map((sub) =>
+      const emailPromises = subscriptions.map((sub: { email: string }) =>
         resend.emails.send({
           from: "Naruto Dark <onboarding@resend.dev>",
           to: sub.email,
