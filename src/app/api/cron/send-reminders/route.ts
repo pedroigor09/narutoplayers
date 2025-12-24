@@ -23,6 +23,11 @@ const DAY_MAP: Record<number, string> = {
 };
 
 export async function GET(request: NextRequest) {
+  // Prevent execution during build time
+  if (process.env.VERCEL_ENV === 'production' && !process.env.DATABASE_URL) {
+    return NextResponse.json({ message: "Build time - skipping" });
+  }
+
   const authHeader = request.headers.get("authorization");
   
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
