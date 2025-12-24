@@ -14,7 +14,7 @@ interface TimelineSectionProps {
 }
 
 export function TimelineSection({ events }: TimelineSectionProps) {
-  const sectionRef = useRef<HTMLSection>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const dotsRef = useRef<HTMLDivElement>(null);
