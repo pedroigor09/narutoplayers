@@ -204,22 +204,6 @@ export function StaffSection() {
       paused: true,
     });
 
-    const wrapForward = () => {
-      iteration++;
-      TRIGGER.wrapping = true;
-      TRIGGER.scroll(TRIGGER.start + 1);
-    };
-
-    const wrapBackward = () => {
-      iteration--;
-      if (iteration < 0) {
-        iteration = 9;
-        LOOP.totalTime(LOOP.totalTime() + LOOP.duration() * 10);
-      }
-      TRIGGER.wrapping = true;
-      TRIGGER.scroll(TRIGGER.end - 1);
-    };
-
     const SCRUB_TO = (totalTime: number) => {
       SCRUB.vars.totalTime = CARD_SNAP(totalTime);
       SCRUB.invalidate().restart();
