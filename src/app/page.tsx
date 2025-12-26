@@ -52,7 +52,7 @@ export default async function Home() {
                   <div className="text-4xl mb-4">👥</div>
                   <h3 className="font-bold text-xl mb-2">Comunidade Ativa</h3>
                   <p className="text-muted-foreground">
-                    Mais de 1000 jogadores online diariamente
+                    Mais de 60 jogadores online diariamente
                   </p>
                 </div>
                 <div className="p-6 rounded-lg bg-card/30 backdrop-blur-sm border border-primary/20">
